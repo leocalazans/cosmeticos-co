@@ -7,14 +7,14 @@
 
     <div class="product-card__assessment">
       <div class="product-card__contentStars">
-        <span v-for="n in Math.floor(product.rating || 0)" :key="n" class="material-icons">
+        <span v-for="n in Math.floor(Number(product.rating) || 0)" :key="n" class="material-icons">
           {{ n <= Math.floor(product.rating || 0) ? 'star' : 'star_border' }}
         </span>
       </div>
 
       <div class="product-card__assessment-score">
         <span class="product-card__assessment-score-value"
-          >{{ (product.rating || 0).toFixed(1) }} / 5</span
+          >{{ (Number(product.rating) || 0).toFixed(1) }} / 5</span
         >
       </div>
     </div>
@@ -90,7 +90,7 @@ const calculateDiscount = (oldPrice: number | undefined, newPrice: number): numb
 
 .product-card__assessment {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -118,7 +118,7 @@ const calculateDiscount = (oldPrice: number | undefined, newPrice: number): numb
 .product-card__prices {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .product-card__price {

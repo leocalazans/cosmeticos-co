@@ -1,10 +1,6 @@
 <template>
   <section class="container mx-auto px-4">
     <div class="product-list">
-      <!-- Exibe o título recebido via props -->
-      <h2 class="product-list__title">{{ title }}</h2>
-
-      <!-- Grid de produtos -->
       <div class="product-list__grid">
         <CoProductCard v-for="(product, index) in products" :key="index" :product="product" />
       </div>
@@ -18,26 +14,34 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { ProductService } from '@/services/ProductService'
+import { Product } from '@/entities/Product'
 import CoProductCard from '@/components/molecules/CoProductCard/CoProductCard.vue'
-import { defineProps, defineEmits } from 'vue'
+import { defineEmits } from 'vue'
 
-const props = defineProps<{
-  products: {
-    name: string
-    image: string
-    rating: number
-    newPrice: number
-    oldPrice?: number
-    discount?: number
-  }[]
-  title: string
-}>()
-
+// Definindo props, se necessário
 const emit = defineEmits(['loadMoreProducts'])
 
-// Função que emite o evento para carregar mais produtos
+const products = ref<Product[]>([])
+const productService = new ProductService()
+const limit = 4 // Número de produtos a carregar por vez
+const skip = ref(0) // Controla o número de produtos já carregados
+
+const fetchProducts = async (skip: number) => {
+  try {
+    const newProducts = await productService.fetchProducts(skip.value, limit)
+    products.value.push(...newProducts) // Adiciona os novos produtos ao array existente
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error)
+  }
+}
+
+onMounted(() => fetchProducts(skip.value)) // Carrega os produtos iniciais
+
 const loadMore = () => {
-  emit('loadMoreProducts')
+  skip.value += limit // Aumenta o skip em 4
+  fetchProducts(skip.value) // Carrega mais produtos
 }
 </script>
 
