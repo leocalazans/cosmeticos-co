@@ -62,7 +62,6 @@
   font-weight: normal;
 }
 
-
 body {
   min-height: 100vh;
   color: var(--color-text);
@@ -88,4 +87,38 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.container {
+  width: 100%;
+  max-width: 1200px; /* Define a largura máxima do contêiner */
+  margin-left: auto; /* Centraliza horizontalmente */
+  margin-right: auto; /* Centraliza horizontalmente */
+  padding-left: 15px; /* Espaço interno lateral para pequenos dispositivos */
+  padding-right: 15px; /* Espaço interno lateral para pequenos dispositivos */
+  box-sizing: border-box; /* Inclui padding na largura total */
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 960px; /* Largura máxima para telas menores */
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 720px; /* Largura máxima para tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 540px; /* Largura máxima para celulares grandes */
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding-left: 10px; /* Reduz o padding lateral para telas muito pequenas */
+    padding-right: 10px;
+  }
 }

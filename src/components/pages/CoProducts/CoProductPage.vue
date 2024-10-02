@@ -1,11 +1,11 @@
 <template>
-    <div class="product-page">
+    <section class="product-page">
       <h1>{{ product.name }}</h1>
       <img :src="product.image" :alt="product.name" />
       <p>Avaliação: {{ product.rating }} / 5</p>
       <p>Preço atual: R${{ product.newPrice.toFixed(2) }}</p>
       <p v-if="product.oldPrice">Preço antigo: R${{ product.oldPrice.toFixed(2) }}</p>
-    </div>
+    </section>
   </template>
   
   <script setup lang="ts">
@@ -46,5 +46,5 @@
     max-width: 300px;
     border-radius: 8px;
   }
+  
   </style>
-ss  

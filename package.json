@@ -16,6 +16,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "cosmeticos-co": "file:",
     "material-icons": "^1.13.12",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
