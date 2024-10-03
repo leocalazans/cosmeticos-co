@@ -10,8 +10,7 @@ const Template = (args) => ({
   setup() {
     return { args }
   },
-  template:
-    '<div style="position:relative; width:600px;background:red"><CoAccount v-bind="args" /><div>'
+  template: '<div style="position:relative; width:600px;"><CoAccount v-bind="args" /><div>'
 })
 
 export const LoggedOut = Template.bind({})
