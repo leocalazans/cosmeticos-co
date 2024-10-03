@@ -5,7 +5,6 @@
         <CoProductCard v-for="(product, index) in products" :key="index" :product="product" />
       </div>
 
-      <!-- Botão de carregar mais produtos -->
       <div class="product-list__load-more">
         <button @click="loadMore" class="product-list__button">Carregar outros</button>
       </div>
@@ -18,30 +17,28 @@ import { ref, onMounted } from 'vue'
 import { ProductService } from '@/services/ProductService'
 import { Product } from '@/entities/Product'
 import CoProductCard from '@/components/molecules/CoProductCard/CoProductCard.vue'
-import { defineEmits } from 'vue'
 
-// Definindo props, se necessário
 const emit = defineEmits(['loadMoreProducts'])
 
 const products = ref<Product[]>([])
 const productService = new ProductService()
-const limit = 4 // Número de produtos a carregar por vez
-const skip = ref(0) // Controla o número de produtos já carregados
+const limit = 4
+const skip = ref(0)
 
-const fetchProducts = async (skip: number) => {
+const fetchProducts = async (skipValue: number) => {
   try {
-    const newProducts = await productService.fetchProducts(skip.value, limit)
-    products.value.push(...newProducts) // Adiciona os novos produtos ao array existente
+    const newProducts = await productService.fetchProducts(skipValue, limit)
+    products.value.push(...newProducts)
   } catch (error) {
     console.error('Erro ao carregar produtos:', error)
   }
 }
 
-onMounted(() => fetchProducts(skip.value)) // Carrega os produtos iniciais
+onMounted(() => fetchProducts(skip.value))
 
 const loadMore = () => {
-  skip.value += limit // Aumenta o skip em 4
-  fetchProducts(skip.value) // Carrega mais produtos
+  skip.value += limit
+  fetchProducts(skip.value)
 }
 </script>
 
@@ -61,19 +58,17 @@ const loadMore = () => {
 
 .product-list__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Padrão para celular (2 colunas) */
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 
 @media (min-width: 768px) {
-  /* Para telas de tablet (3 colunas) */
   .product-list__grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  /* Para telas de desktop (4 colunas) */
   .product-list__grid {
     grid-template-columns: repeat(4, 1fr);
   }

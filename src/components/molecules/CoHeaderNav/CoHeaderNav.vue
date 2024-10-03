@@ -2,18 +2,28 @@
   <nav class="headerNav">
     <a href="#">
       <span>Produtos</span>
-      <span class="material-icons-outlined">
-        expand_more
-      </span>
+      <span class="material-icons-outlined">expand_more</span>
     </a>
     <ul>
-      <li>Maquiagem</li>
-      <li>Perfumes</li>
+      <li v-for="category in categories.categories" :key="category">{{ category }}</li>
     </ul>
   </nav>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import { ProductService } from '@/services/ProductService'
+
+const categories = ref([])
+const productService = new ProductService()
+
+onMounted(async () => {
+  try {
+    categories.value = await productService.fetchCategories()
+  } catch (error) {
+    console.error('Erro ao buscar categorias:', error)
+  }
+})
 </script>
 
 <style scoped>
@@ -42,14 +52,15 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  top: 50%;
+  top: calc(100%);
   left: 0;
   background-color: white;
   border: 1px solid #ddd;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   width: 150px;
-  display: none; /* Escondido por padrão */
+  display: none;
+  z-index: 555;
 }
 
 .headerNav:hover ul {

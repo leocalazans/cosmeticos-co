@@ -100,25 +100,25 @@ body {
 
 @media (max-width: 1200px) {
   .container {
-    max-width: 960px; /* Largura máxima para telas menores */
+    max-width: 960px;
   }
 }
 
 @media (max-width: 992px) {
   .container {
-    max-width: 720px; /* Largura máxima para tablets */
+    max-width: 720px;
   }
 }
 
 @media (max-width: 768px) {
   .container {
-    max-width: 540px; /* Largura máxima para celulares grandes */
+    max-width: 540px;
   }
 }
 
 @media (max-width: 576px) {
   .container {
-    padding-left: 10px; /* Reduz o padding lateral para telas muito pequenas */
+    padding-left: 10px;
     padding-right: 10px;
   }
 }

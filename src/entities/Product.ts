@@ -7,6 +7,7 @@ export class Product {
   rating?: number
   newPrice: number
   oldPrice?: number
+  description?: string
 
   constructor(
     id: number,
@@ -14,7 +15,8 @@ export class Product {
     image: string,
     newPrice: number,
     oldPrice?: number,
-    rating?: number
+    rating?: number,
+    description?: string
   ) {
     this.id = id
     this.name = name
@@ -22,6 +24,7 @@ export class Product {
     this.newPrice = newPrice
     this.oldPrice = oldPrice
     this.rating = rating
+    this.description = description
   }
 
   // Método para calcular o desconto

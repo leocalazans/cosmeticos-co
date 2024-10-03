@@ -1,63 +1,58 @@
 <template>
-  <div class="cart__container">
-    <div class="cart__button" @click="toggleCart">
-      <span class="material-icons-outlined text-4xl">
-        shopping_cart
-      </span>
-      <span class="cart__button-quantity" v-if="cartItems.length">{{ cartItems.length }}</span>
-    </div>
-    
-    <div class="cart" v-if="isCartVisible">
+  <div class="cart__container" role="complementary">
+    <button class="cart__button" @click="toggleCart" aria-label="Toggle cart">
+      <span class="material-icons-outlined text-4xl"> shopping_cart </span>
+      <span class="cart__button-quantity" v-if="items.length">{{ items.length }}</span>
+    </button>
+
+    <div class="cart" v-if="isCartVisible" aria-labelledby="cart-title">
       <div class="cart__card">
+        <h2 id="cart-title" class="visually-hidden">Carrinho de Compras</h2>
         <ul class="cart__list">
-          <li v-for="(item, index) in cartItems" :key="index" class="cart__item">
+          <li v-for="(item, index) in items" :key="index" class="cart__item" role="listitem">
             <img :src="item.image" :alt="item.name" class="cart__item-image" />
             <span class="cart__item-name">{{ item.name }}</span>
-            <span class="cart__item-remove" @click="removeItem(index)">x</span>
+            <span class="cart__item-remove" @click="removeItem(index)" aria-label="Remove item"
+              >x</span
+            >
           </li>
         </ul>
       </div>
-      <div v-if="isCartVisible && !cartItems.length" class="cart__empty-message">
+      <div v-if="isCartVisible && !items.length" class="cart__empty-message" aria-live="polite">
         <span>Carrinho vazio</span>
       </div>
     </div>
-  </div>  
+  </div>
 </template>
-  
+
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, onMounted, onBeforeUnmount } from 'vue'
-
-interface CartItem {
-  name: string;
-  image: string;
-}
-
-const props = defineProps<{
-  cartItems: CartItem[];
-}>()
-
-const emit = defineEmits<{
-  (event: 'remove', index: number): void;
-}>()
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useCartStore } from '@/stores/cartStore'
+import { storeToRefs } from 'pinia'
 
 const isCartVisible = ref(false)
 
-// Função para alternar a visibilidade do carrinho
+const cartStore = useCartStore()
+const { items } = storeToRefs(cartStore)
+
 const toggleCart = () => {
   isCartVisible.value = !isCartVisible.value
 }
 
-// Função para remover um item do carrinho
 const removeItem = (index: number) => {
-  emit('remove', index)
+  cartStore.removeItem(index)
 }
 
-// Função para detectar cliques fora do cartão
 const handleClickOutside = (event: MouseEvent) => {
   const cart = document.querySelector('.cart')
   const button = document.querySelector('.cart__button')
 
-  if (cart && button && !cart.contains(event.target as Node) && !button.contains(event.target as Node)) {
+  if (
+    cart &&
+    button &&
+    !cart.contains(event.target as Node) &&
+    !button.contains(event.target as Node)
+  ) {
     isCartVisible.value = false
   }
 }
@@ -70,7 +65,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-  
+
 <style scoped>
 .cart__container {
   position: relative;
@@ -93,7 +88,9 @@ onBeforeUnmount(() => {
   padding: 10px;
   text-align: center;
   position: relative;
-  cursor: pointer; 
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
 
 .cart__button:hover {

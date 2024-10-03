@@ -6,8 +6,8 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "src/**/*.ts", 
-    "src/**/*.d.ts", 
+    "src/**/*.ts",
+    "src/**/*.d.ts",
     "src/**/*.vue"
   ],
   "compilerOptions": {

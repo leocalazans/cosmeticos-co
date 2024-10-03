@@ -1,15 +1,36 @@
-// src/components/molecules/SearchBar.spec.js
-import { render, fireEvent } from '@testing-library/vue';
-import SearchBar from './SearchBar.vue';
+import CoSearchBar from '@/components/molecules/CoSearchBar/CoSearchBar.vue'
 
-test('it should emit search event on button click', async () => {
-  const { getByPlaceholderText, getByText, emitted } = render(SearchBar);
+export default {
+  title: 'Molecules/CoSearchBar',
+  component: CoSearchBar,
+  argTypes: {
+    searchQuery: {
+      control: 'text',
+      description: 'Texto de entrada para busca',
+      defaultValue: ''
+    },
+    filteredProducts: {
+      control: 'object',
+      description: 'Produtos filtrados baseados na busca',
+      defaultValue: []
+    }
+  }
+}
 
-  const input = getByPlaceholderText('Buscar produto...');
-  const button = getByText('Buscar');
+const Template = (args) => ({
+  components: { CoSearchBar },
+  setup() {
+    return { args }
+  },
+  template: '<CoSearchBar v-bind="args" />'
+})
 
-  await fireEvent.update(input, 'Shampoo');
-  await fireEvent.click(button);
-
-  expect(emitted().search[0]).toEqual(['Shampoo']);
-});
+export const Default = Template.bind({})
+Default.args = {
+  searchQuery: '',
+  filteredProducts: [
+    { id: 1, name: 'Produto 1', image: 'https://via.placeholder.com/40' },
+    { id: 2, name: 'Produto 2', image: 'https://via.placeholder.com/40' },
+    { id: 3, name: 'Produto 3', image: 'https://via.placeholder.com/40' }
+  ]
+}

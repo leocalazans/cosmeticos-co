@@ -3,43 +3,40 @@
     <div class="account__button" @click="toggleAccount">
       <span class="material-icons-outlined">account_circle</span>
     </div>
-    
+
     <div class="account__card" v-if="isAccountVisible">
-      <h3 class="text-lg font-bold text-gray-800">Conta do Usuário</h3>
-      
+      <h3 class="text-lg font-bold text-gray-800">Usuário</h3>
+
       <div v-if="isLoggedIn">
         <p class="mt-2 text-gray-600">Bem-vindo, {{ userName }}!</p>
-        <button @click="toggleLogin" class="mt-2 text-red-500 hover:underline">Sair</button>
+        <button
+          @click="toggleLogin"
+          class="account__button_exit account__button-submit mt-2 text-red-500 hover:underline"
+        >
+          Sair
+        </button>
       </div>
-      
+
       <div v-else>
         <form @submit.prevent="handleLogin" class="flex flex-col mt-4">
-          <label for="username" class="text-sm font-semibold text-gray-700">Usuário:</label>
-          <input 
-            type="text" 
-            id="username" 
-            v-model="username" 
-            placeholder="Digite seu usuário" 
-            class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mb-2"
+          <input
+            type="text"
+            id="username"
+            v-model="username"
+            placeholder="Digite seu usuário"
+            class="account__input"
             required
           />
-          
-          <label for="password" class="text-sm font-semibold text-gray-700">Senha:</label>
-          <input 
-            type="password" 
-            id="password" 
-            v-model="password" 
-            placeholder="Digite sua senha" 
-            class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mb-4"
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            placeholder="Digite sua senha"
+            class="account__input"
             required
           />
-          
-          <button 
-            type="submit" 
-            class="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition duration-200 font-semibold"
-          >
-            Entrar
-          </button>
+
+          <button type="submit" class="account__button account__button-submit">Entrar</button>
         </form>
       </div>
     </div>
@@ -47,59 +44,58 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-const isAccountVisible = ref(false);
-const userName = ref('John Doe');
-const isLoggedIn = ref(false);
-const username = ref('');
-const password = ref('');
+const isAccountVisible = ref(false)
+const userName = ref('John Doe')
+const isLoggedIn = ref(false)
+const username = ref('')
+const password = ref('')
 
-// Função para alternar a visibilidade do cartão
 const toggleAccount = () => {
-  isAccountVisible.value = !isAccountVisible.value;
-};
+  isAccountVisible.value = !isAccountVisible.value
+}
 
-// Alterna o estado de login
 const toggleLogin = () => {
-  isLoggedIn.value = !isLoggedIn.value;
-};
+  isLoggedIn.value = !isLoggedIn.value
+}
 
-// Função para tratar o login
 const handleLogin = () => {
-  // Simulação de autenticação
   if (username.value && password.value) {
-    isLoggedIn.value = true; // Loga o usuário
-    userName.value = username.value; // Define o nome de usuário
-    username.value = ''; // Limpa o campo de usuário
-    password.value = ''; // Limpa o campo de senha
+    isLoggedIn.value = true
+    userName.value = username.value
+    username.value = ''
+    password.value = ''
   }
-};
+}
 
-// Função para fechar o cartão ao sair
 const handleMouseLeave = () => {
   if (!isLoggedIn.value) {
-    isAccountVisible.value = false;
+    isAccountVisible.value = false
   }
-};
+}
 
-// Escutando cliques fora do cartão para fechá-lo
 const handleClickOutside = (event: MouseEvent) => {
-  const card = document.querySelector('.account__card');
-  const button = document.querySelector('.account__button');
+  const card = document.querySelector('.account__card')
+  const button = document.querySelector('.account__button')
 
-  if (card && button && !card.contains(event.target as Node) && !button.contains(event.target as Node)) {
-    isAccountVisible.value = false;
+  if (
+    card &&
+    button &&
+    !card.contains(event.target as Node) &&
+    !button.contains(event.target as Node)
+  ) {
+    isAccountVisible.value = false
   }
-};
+}
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-});
+  document.addEventListener('click', handleClickOutside)
+})
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
@@ -113,6 +109,7 @@ onBeforeUnmount(() => {
   padding: 10px;
   cursor: pointer;
   transition: transform 0.2s;
+  color: #000;
 }
 
 .account__button:hover {
@@ -124,12 +121,67 @@ onBeforeUnmount(() => {
   top: 100%;
   right: 0px;
   padding: 15px;
-  background-color: rgba(249, 249, 249, 0.9); 
+  background-color: rgb(249, 249, 249);
   border: 1px solid rgba(221, 221, 221, 0.7);
-  border-radius: 12px; /* Arredondando os cantos */
+  border-radius: 20px;
   margin-top: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Aumentando a sombra */
-  z-index: 100; 
-  min-width: 240px; /* Aumentando a largura mínima */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 240px;
+}
+
+.account__input {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  background-color: #f9fafb;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  margin-bottom: 16px;
+  font-size: 12px;
+  outline: none;
+  width: 100%;
+}
+
+.account__input:focus {
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(173, 173, 173, 0.3);
+}
+
+.account__input::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.account__button-submit {
+  width: 100%;
+  padding: 6px 15px;
+  border: none;
+  border-radius: 20px;
+  background-color: #000000;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.account__button-submit:hover {
+  background-color: #9d9e9d;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.account__button-submit:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(166, 167, 166, 0.5);
+}
+
+.account__button-submit:active {
+  background-color: #898a89;
+  transform: scale(0.98);
 }
 </style>
