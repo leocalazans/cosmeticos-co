@@ -1,54 +1,9 @@
-<template>
-  <div class="account">
-    <div class="account__button" @click="toggleAccount">
-      <span class="material-icons-outlined">account_circle</span>
-    </div>
-
-    <div class="account__card" v-if="isAccountVisible">
-      <h3 class="text-lg font-bold text-gray-800">Usuário</h3>
-
-      <div v-if="isLoggedIn">
-        <p class="mt-2 text-gray-600">Bem-vindo, {{ userName }}!</p>
-        <button
-          @click="toggleLogin"
-          class="account__button_exit account__button-submit mt-2 text-red-500 hover:underline"
-        >
-          Sair
-        </button>
-      </div>
-
-      <div v-else>
-        <form @submit.prevent="handleLogin" class="flex flex-col mt-4">
-          <input
-            type="text"
-            id="username"
-            v-model="username"
-            placeholder="Digite seu usuário"
-            class="account__input"
-            required
-          />
-          <input
-            type="password"
-            id="password"
-            v-model="password"
-            placeholder="Digite sua senha"
-            class="account__input"
-            required
-          />
-
-          <button type="submit" class="account__button account__button-submit">Entrar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
 const isAccountVisible = ref(false)
-const userName = ref('John Doe')
-const isLoggedIn = ref(false)
+const authStore = useAuthStore()
 const username = ref('')
 const password = ref('')
 
@@ -56,23 +11,19 @@ const toggleAccount = () => {
   isAccountVisible.value = !isAccountVisible.value
 }
 
-const toggleLogin = () => {
-  isLoggedIn.value = !isLoggedIn.value
-}
-
-const handleLogin = () => {
+const handleLogin = async () => {
   if (username.value && password.value) {
-    isLoggedIn.value = true
-    userName.value = username.value
+    await authStore.login(username.value, password.value)
     username.value = ''
     password.value = ''
+    if (authStore.isLoggedIn) {
+      toggleAccount()
+    }
   }
 }
 
-const handleMouseLeave = () => {
-  if (!isLoggedIn.value) {
-    isAccountVisible.value = false
-  }
+const handleLogout = () => {
+  authStore.logout()
 }
 
 const handleClickOutside = (event: MouseEvent) => {
@@ -98,6 +49,47 @@ onBeforeUnmount(() => {
 })
 </script>
 
+<template>
+  <div class="account">
+    <div class="account__button" @click="toggleAccount">
+      <span class="material-icons-outlined">account_circle</span>
+    </div>
+
+    <div class="account__card" v-if="isAccountVisible">
+      <h3 class="text-lg font-bold text-gray-800">Usuário</h3>
+
+      <div v-if="authStore.isLoggedIn">
+        <p class="mt-2 text-gray-600">Bem-vindo, {{ authStore.userName }}!</p>
+        <button
+          @click="handleLogout"
+          class="account__button_exit account__button-submit mt-2 text-red-500 hover:underline"
+        >
+          Sair
+        </button>
+      </div>
+
+      <div v-else>
+        <form @submit.prevent="handleLogin" class="flex flex-col mt-4">
+          <input
+            type="text"
+            v-model="username"
+            placeholder="Digite seu usuário"
+            class="account__input"
+            required
+          />
+          <input
+            type="password"
+            v-model="password"
+            placeholder="Digite sua senha"
+            class="account__input"
+            required
+          />
+          <button type="submit" class="account__button account__button-submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
 <style scoped>
 .account {
   position: relative;

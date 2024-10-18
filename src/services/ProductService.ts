@@ -4,7 +4,7 @@ export class ProductService {
   private baseUrl: string
 
   constructor() {
-    this.baseUrl = 'http://localhost:3000/products'
+    this.baseUrl = `${import.meta.env.VITE_API_PRODUCTS_URL}/products`
   }
 
   async fetchProducts(skip: number = 0, limit: number = 4, query: string = ''): Promise<Product[]> {
