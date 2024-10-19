@@ -18,13 +18,11 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(username: string, password: string) {
       try {
-        const token = await authUseCase.executeLogin(username, password)
-        this.token = token
+        const response = await authUseCase.executeLogin(username, password)
+        this.token = response.access_token
         this.userName = username
         this.isLoggedIn = true
-
-        // Salvar o token no repositório (localStorage)
-        authRepository.saveToken(token)
+        authRepository.saveToken(response.access_token)
       } catch (error) {
         console.error('Login failed:', error)
       }
@@ -35,7 +33,6 @@ export const useAuthStore = defineStore('auth', {
       this.userName = ''
       this.isLoggedIn = false
 
-      // Limpar o token do repositório
       authRepository.clearToken()
     }
   },

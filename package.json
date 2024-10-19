@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "cosmeticos-co": "file:",
+    "crypto-js": "^4.2.0",
     "material-icons": "^1.13.12",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^4.0.2",

@@ -1,5 +1,5 @@
 export class AuthRepository {
-  private static TOKEN_KEY = 'authToken'
+  private static TOKEN_KEY = 'access_token'
 
   saveToken(token: string): void {
     localStorage.setItem(AuthRepository.TOKEN_KEY, token)

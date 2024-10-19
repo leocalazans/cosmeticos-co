@@ -1,3 +1,8 @@
+export interface authResponse {
+  access_token: string
+  token_type: string
+}
+
 export class AuthService {
   private apiUrl: string
 
@@ -5,7 +10,7 @@ export class AuthService {
     this.apiUrl = apiUrl
   }
 
-  async login(username: string, password: string): Promise<{ token: string }> {
+  async login(username: string, password: string): Promise<authResponse> {
     const response = await fetch(`${this.apiUrl}/login`, {
       method: 'POST',
       headers: {
@@ -17,9 +22,7 @@ export class AuthService {
     if (!response.ok) {
       throw new Error('Failed to login')
     }
-
-    const data = await response.json()
-    return data // Esperando que o token JWT venha no formato { token: 'jwt_token' }
+    return await response.json()
   }
 
   async logout(): Promise<void> {
@@ -27,7 +30,7 @@ export class AuthService {
   }
 
   async fetchProtectedResource() {
-    const token = localStorage.getItem('authToken')
+    const token = localStorage.getItem('access_token')
     const response = await fetch(`${this.apiUrl}/protected-endpoint`, {
       method: 'GET',
       headers: {
@@ -43,7 +46,7 @@ export class AuthService {
   }
 
   authHeader = () => {
-    const token = localStorage.getItem('authToken')
+    const token = localStorage.getItem('access_token')
     return token ? { Authorization: `Bearer ${token}` } : {}
   }
 }
